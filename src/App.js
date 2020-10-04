@@ -8,27 +8,32 @@ import { fetchData } from './api/index';
 
 function App() {
   const [data, setData] = useState({});
+  const [country, setCountry] = useState('');
   useEffect(() => {
     const getData = async () => {
       const data = await fetchData();
       setData(data);
+      setCountry('');
     };
     getData();
   }, []);
-  const handleChange = async (country) => {
+  const handleChange = async (selectedCountry) => {
     let fetchedData = {};
-    if (country === 'global') {
+    if (selectedCountry === 'global') {
       fetchedData = await fetchData();
+      setData(fetchedData);
+      setCountry('');
     } else {
-      fetchedData = await fetchData(country);
+      fetchedData = await fetchData(selectedCountry);
+      setData(fetchedData);
+      setCountry(selectedCountry);
     }
-    setData(fetchedData);
   };
   return (
     <div className={styles.container}>
       <Cards data={data} />
       <CountryPicker handleChange={handleChange} />
-      <Chart />
+      <Chart data={data} country={country} />
     </div>
   );
 }
