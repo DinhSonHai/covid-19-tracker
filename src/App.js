@@ -15,10 +15,19 @@ function App() {
     };
     getData();
   }, []);
+  const handleChange = async (country) => {
+    let fetchedData = {};
+    if (country === 'global') {
+      fetchedData = await fetchData();
+    } else {
+      fetchedData = await fetchData(country);
+    }
+    setData(fetchedData);
+  };
   return (
     <div className={styles.container}>
       <Cards data={data} />
-      <CountryPicker />
+      <CountryPicker handleChange={handleChange} />
       <Chart />
     </div>
   );
